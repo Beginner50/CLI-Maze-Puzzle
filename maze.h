@@ -1,69 +1,26 @@
 #pragma once
-#include <iostream>
-#include <cassert>
+#include <array>
+#include "spatialClasses.h"
+#include "tile.h"
 
-constexpr int boardLength{ 10 };
-
-struct Pos
-{
-    int m_x{};
-    int m_y{};
-};
-
-class Tile
-{
-public:
-    enum Type
-    {
-        empty,
-        wall,
-        player,
-        finish,
-        max_types
-    };
-
-    Tile(char tileType)
-    {
-        switch (tileType)
-        {
-        case '@': m_type = wall; break;
-        case ' ': m_type = empty; break;
-        case 'P': m_type = player; break;
-        case '!':  m_type = finish; break;
-        default: break;
-        }
-        assert((tileType == '@' || ' ' || 'P' || '!') && "Invalid Maze Entity");
-    }
-
-    friend std::ostream& operator<<(std::ostream& stream, const Tile tile);
-    bool isEmptyTile() { return m_type == empty; }
-
-private:
-    Type m_type{};
-};
+constexpr int boardHeight{ 10 };
+constexpr int boardWidth{ 20 };
 
 class Maze
 {
 public:
-    Maze() = default;
+    Maze(std::string_view map) { populateTiles(map); }
 
     friend std::ostream& operator<<(std::ostream& stream, const Maze& maze);
+
+    void populateTiles(std::string_view map);
+
+    Pos getPlayerPos();
     Tile getTile(Pos pos);
-    Pos getPlayerTile();
-    Tile& operator[] (const Pos pos);
-    Tile operator[](const Pos pos) const;
+
+    bool swapTiles(Pos playerPos, Pos adjacentPos);
+    bool movePlayer(Direction dir);
 
 private:
-    Tile m_tiles[boardLength][boardLength]{
-        {'@', '@', '@', '@', '@', '@', '@', '@', '@', '@'},
-        {'@', ' ', ' ', ' ', ' ', ' ', 'P', ' ', ' ', '@'},
-        {'@', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '@'},
-        {'@', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '@'},
-        {'@', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '@'},
-        {'@', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '@'},
-        {'@', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '@'},
-        {'@', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '@'},
-        {'@', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '@'},
-        {'@', '@', '!', '@', '@', '@', '@', '@', '@', '@'}
-    };
+    std::array<Tile, boardHeight* boardWidth> m_tiles{};
 };

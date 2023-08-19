@@ -1,5 +1,6 @@
 #include <iostream>
 #include <limits>
+#include "spatialClasses.h"
 
 inline bool validChar(char ch)
 {
@@ -27,4 +28,19 @@ inline char getChar()
     }
 
     return ch;
+}
+
+inline Direction charToDirection(char ch)
+{
+    switch (ch)
+    {
+    case 'a': return left;
+    case 'd': return right;
+    case 'w': return up;
+    case 's': return down;
+    default: break;
+    }
+
+    assert(0 && "Char cannot map to know directions. Char is not valid");
+    return left;
 }

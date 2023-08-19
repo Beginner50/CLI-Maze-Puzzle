@@ -12,8 +12,8 @@ Allow user to quit before winning
 
 Phase 2:
 Maze:
-Turn maze into 1-D array
-Validate Maze
+(Turn maze into 1-D array) {Optional}
+Allow maze to be constructed using an array of strings
 Allow player movement
 
 User:
@@ -21,7 +21,7 @@ Translate user input into player motion
 
 Phase 3:
 Maze:
-Allow maze to be constructed using an array of strings
+Validate Maze
 Add win condition
 
 -------------------------------------------------------------------------------------------------

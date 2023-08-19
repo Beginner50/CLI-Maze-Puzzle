@@ -1,39 +1,57 @@
 #include "maze.h"
 
-Tile& Maze::operator[](const Pos pos)
+void Maze::populateTiles(std::string_view map)
 {
-    return m_tiles[pos.m_x][pos.m_y];
-}
-
-Tile Maze::operator[](const Pos pos) const
-{
-    return m_tiles[pos.m_x][pos.m_y];
-}
-
-std::ostream& operator<<(std::ostream& stream, const Tile tile)
-{
-    switch (tile.m_type)
-    {
-    case Tile::empty: return stream << ' ';
-    case Tile::wall: return stream << '@';
-    case Tile::player: return stream << 'P';
-    case Tile::finish: return stream << '!';
-    default: break;
-    }
-
-    assert(0 && "Invalid Tile");
-    return stream;
+    for (std::size_t i{}; i < map.size(); ++i)
+        m_tiles[i] = map[i];
 }
 
 std::ostream& operator<<(std::ostream& stream, const Maze& maze)
 {
-    for (int row{}; row < boardLength; ++row)
+    system("clear");
+    for (int row{}; row < boardHeight; ++row)
     {
-        for (int col{}; col < boardLength; ++col)
+        for (int col{}; col < boardWidth; ++col)
         {
-            stream << maze[Pos{ row, col }];
+            stream << maze.m_tiles[static_cast<std::size_t>(row * boardWidth + col)];
         }
         stream << '\n';
     }
     return stream;
+}
+
+Tile Maze::getTile(Pos pos) { return m_tiles[pos.toIndex(boardWidth)]; }
+
+Pos Maze::getPlayerPos()
+{
+    for (int row{}; row < boardHeight; ++row)
+    {
+        for (int col{}; col < boardWidth; ++col)
+        {
+            if (m_tiles[static_cast<std::size_t>(row * boardWidth + col)].isPlayerTile())
+                return { row, col };
+        }
+    }
+
+    assert(0 && "Player Tile not found!");
+    return { -1, -1 };
+}
+
+
+bool Maze::swapTiles(Pos playerPos, Pos adjacentPos)
+{
+    Tile temp{ getTile(adjacentPos) };
+    m_tiles[adjacentPos.toIndex(boardWidth)] = getTile(playerPos);
+    m_tiles[playerPos.toIndex(boardWidth)] = temp;
+    return true;
+}
+
+bool Maze::movePlayer(Direction dir)
+{
+    Pos playerPos{ getPlayerPos() };
+    Pos adjacentPos{ playerPos.getAdjacentPos(dir) };
+
+    if (playerPos != adjacentPos && getTile(adjacentPos).isTraversable())
+        return swapTiles(playerPos, adjacentPos);
+    return false;
 }
