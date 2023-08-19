@@ -12,6 +12,8 @@ Allow user to quit before winning
 
 Phase 2:
 Maze:
+Turn maze into 1-D array
+Validate Maze
 Allow player movement
 
 User:
@@ -19,4 +21,15 @@ Translate user input into player motion
 
 Phase 3:
 Maze:
+Allow maze to be constructed using an array of strings
 Add win condition
+
+-------------------------------------------------------------------------------------------------
+Phase 1:
+Tile Object :- Print Tile, Check if Player Tile
+Maze Object :- Initialise Maze (Add tiles to a board), Get Tile at given Pos, Find Pos of player Tile
+               , Translate Pos to position on board, 
+Pos Object (Struct) :- Helper Object 
+UserInput :- Get user input, Validate user input, Allow user to exit
+
+SubGoals: Display Maze, Check For Valid Input
