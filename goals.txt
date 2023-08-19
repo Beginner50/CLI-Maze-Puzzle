@@ -1,0 +1,22 @@
+Program separated into maze and user input
+
+Phase 1:
+Maze:
+Display Tiles
+Display a maze
+
+User:
+Get user input
+Validate user input
+Allow user to quit before winning
+
+Phase 2:
+Maze:
+Allow player movement
+
+User:
+Translate user input into player motion
+
+Phase 3:
+Maze:
+Add win condition
