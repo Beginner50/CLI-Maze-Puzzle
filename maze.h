@@ -16,10 +16,13 @@ public:
     void populateTiles(std::string_view map);
 
     Pos getPlayerPos();
-    Tile getTile(Pos pos);
+    Tile& getTile(Pos pos);
 
     bool swapTiles(Pos playerPos, Pos adjacentPos);
+    bool replaceTile(Pos pos, Tile tile);
+
     bool movePlayer(Direction dir);
+    bool checkWin();
 
 private:
     std::array<Tile, boardHeight* boardWidth> m_tiles{};

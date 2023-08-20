@@ -20,7 +20,7 @@ std::ostream& operator<<(std::ostream& stream, const Maze& maze)
     return stream;
 }
 
-Tile Maze::getTile(Pos pos) { return m_tiles[pos.toIndex(boardWidth)]; }
+Tile& Maze::getTile(Pos pos) { return m_tiles[pos.toIndex(boardWidth)]; }
 
 Pos Maze::getPlayerPos()
 {
@@ -37,7 +37,6 @@ Pos Maze::getPlayerPos()
     return { -1, -1 };
 }
 
-
 bool Maze::swapTiles(Pos playerPos, Pos adjacentPos)
 {
     Tile temp{ getTile(adjacentPos) };
@@ -46,12 +45,38 @@ bool Maze::swapTiles(Pos playerPos, Pos adjacentPos)
     return true;
 }
 
+bool Maze::replaceTile(Pos pos, Tile tile)
+{
+    m_tiles[pos.toIndex(boardWidth)] = tile;
+    return true;
+}
+
 bool Maze::movePlayer(Direction dir)
 {
     Pos playerPos{ getPlayerPos() };
     Pos adjacentPos{ playerPos.getAdjacentPos(dir) };
 
-    if (playerPos != adjacentPos && getTile(adjacentPos).isTraversable())
+    if (playerPos == adjacentPos)
+        return false;
+
+    Tile adjacentTile{ getTile(adjacentPos) };
+    if (adjacentTile.getType() == Tile::empty)
         return swapTiles(playerPos, adjacentPos);
+    else if (adjacentTile.getType() == Tile::finish)
+    {
+        replaceTile(adjacentPos, Tile::empty);
+        return swapTiles(playerPos, adjacentPos);
+    }
+
     return false;
+}
+
+bool Maze::checkWin()
+{
+    for (std::size_t i{}; i < boardWidth * boardHeight; ++i)
+    {
+        if (m_tiles[i].getType() == Tile::finish)
+            return false;
+    }
+    return true;
 }
