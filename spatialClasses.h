@@ -15,7 +15,7 @@ struct Pos
     int x{};
     int y{};
 
-    std::size_t toIndex(int boardWidth)
+    std::size_t toIndex1D(int boardWidth)
     {
         return static_cast<std::size_t>(x * boardWidth + y);
     }

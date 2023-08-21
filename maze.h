@@ -1,29 +1,21 @@
 #pragma once
-#include <array>
-#include "spatialClasses.h"
-#include "tile.h"
-
-constexpr int boardHeight{ 10 };
-constexpr int boardWidth{ 20 };
+#include "board.h"
 
 class Maze
 {
 public:
-    Maze(std::string_view map) { populateTiles(map); }
+    Maze(std::size_t boardWidth, std::size_t boardHeight, std::string_view map)
+        :m_board{ boardWidth, boardHeight }
+    {
+        m_board.populateTiles(map);
+    }
 
-    friend std::ostream& operator<<(std::ostream& stream, const Maze& maze);
-
-    void populateTiles(std::string_view map);
+    friend std::ostream& operator<<(std::ostream& stream, const Maze& maze) { return stream << maze.m_board; }
 
     Pos getPlayerPos();
-    Tile& getTile(Pos pos);
-
-    bool swapTiles(Pos playerPos, Pos adjacentPos);
-    bool replaceTile(Pos pos, Tile tile);
-
     bool movePlayer(Direction dir);
     bool checkWin();
 
 private:
-    std::array<Tile, boardHeight* boardWidth> m_tiles{};
+    Board m_board;
 };

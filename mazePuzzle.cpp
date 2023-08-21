@@ -15,7 +15,7 @@ int main()
                                     "@@@@@@@!@@@@@@@@@@@@"
     };
 
-    Maze maze{ map };
+    Maze maze{ 20, 10, map };
 
     while (true)
     {
